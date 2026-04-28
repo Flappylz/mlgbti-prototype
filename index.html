@@ -194,16 +194,22 @@ body::before{
 @keyframes pulse{ 0%,100%{opacity:1; transform:scale(1)} 50%{opacity:.4; transform:scale(.7)}}
 
 .cover h1{
-  margin: 26px 0 0; font-family: var(--serif-cn);
+  margin: 32px 0 0; font-family: var(--serif-cn);
   font-weight: 500;
-  font-size: 46px; line-height: 1.06; letter-spacing: -.01em;
+  font-size: 44px; line-height: 1.05; letter-spacing: -.02em;
   color: var(--ink);
 }
 .cover h1 em{
   font-family: var(--serif-en);
   font-style: italic; font-weight: 400;
-  display:block; font-size: 22px; line-height:1.22; margin-top:14px;
-  color: var(--ink-2);
+  display:block; font-size: 15.5px; line-height:1.5; margin-top:20px;
+  color: var(--ink-3); letter-spacing: 0;
+  max-width: 360px;
+}
+.cover h1 em::before{
+  content:""; display:block;
+  width: 28px; height:1px; background: var(--line);
+  margin-bottom: 16px;
 }
 .cover .sub{
   margin-top:14px; font-size: 13px; line-height:1.7;
@@ -745,8 +751,9 @@ body::before{
             <span class="pulse"><i></i> 实时压力测试</span>
           </div>
 
-          <h1>多维语言与<br/>生成式行为<br/>类型指标
-            <em>Multidimensional Linguistic<br/>&amp; Generative Behavior<br/>Type Indicator</em>
+          <h1>
+            多维语言与生成式<br/>行为类型指标。
+            <em>Multidimensional Linguistic &amp; Generative Behavior Type Indicator —— a behavioral fingerprint, diagnosed by the end-to-end voice model.</em>
           </h1>
 
           <div class="lettermark" aria-hidden="true">
