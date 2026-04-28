@@ -253,34 +253,6 @@ body::before{
 }
 .cover h1{ flex-shrink: 0;}
 
-/* 四象限色卡预览 */
-.camps{
-  margin-top: 22px;
-  display:grid; gap: 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.camp-row{
-  display:grid; grid-template-columns: 16px 26px 1fr auto; gap: 12px;
-  align-items: baseline;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--serif-cn); font-size: 14px; color: var(--ink);
-}
-.camp-row:last-child{ border-bottom: none;}
-.camp-row i{
-  width:8px; height:8px; border-radius:50%; align-self: center;
-  background: var(--c); box-shadow: 0 0 14px var(--c);
-}
-.camp-row b{
-  font-family: var(--serif-en); font-style: italic; font-weight: 400;
-  color: var(--ink-3); font-size: 13px;
-}
-.camp-row em{
-  font-family: var(--serif-en); font-style: italic;
-  color: var(--ink-3); font-size: 12px;
-}
-
 /* 滚动播报 */
 .ticker{
   margin-top: 18px;
@@ -789,13 +761,6 @@ body::before{
           <p class="sub" style="margin-top:24px">
             一份基于<b>声纹·语气·停顿·打断</b>的行为画像。由端到端语音模型实时担任"考官"，三分钟<b>压力对线</b>，给你贴一个 MLGBTI 标签。
           </p>
-
-          <div class="camps" aria-hidden="true">
-            <div class="camp-row"><i style="--c:#A8A8B3"></i><b>I.</b>老油条<em>The Veterans</em></div>
-            <div class="camp-row"><i style="--c:#8FA866"></i><b>II.</b>滚刀肉<em>The Slackers</em></div>
-            <div class="camp-row"><i style="--c:#E89B40"></i><b>III.</b>高压锅<em>The Pressure Cookers</em></div>
-            <div class="camp-row"><i style="--c:#D9384A"></i><b>IV.</b>精神病院<em>The Asylum</em></div>
-          </div>
 
           <button class="cta" id="goBrief">
             开始对线
