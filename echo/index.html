@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>MLGBTI · 多维语言与生成式行为类型指标</title>
+<title>ECHO · 性格压力测试</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Serif+SC:wght@300;400;500;700;900&family=Noto+Sans+SC:wght@200;300;400;500;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
 /* =========================================================
-   MLGBTI · 可交互原型
+   ECHO · 可交互原型
    设计方向：编辑感学术 × 黑色幽默 × 暗色极简
    外框：iPhone 16 Pro Max  (440 × 956 pt)
    ========================================================= */
@@ -278,7 +278,7 @@ body::before{
   color: var(--ink-2);
 }
 
-/* MLGBTI 大字横排 */
+/* ECHO 大字横排 */
 .cover-bottom{
   margin-top: auto;
   padding-bottom: 42px;
@@ -1312,7 +1312,7 @@ body::before{
 
 <div class="meta">
   <span class="dot"></span>
-  <span><b>MLGBTI ·</b> Interactive Prototype</span>
+  <span><b>ECHO ·</b> Interactive Prototype</span>
   <span>Frame · iPhone 16 Pro Max · 440 × 956pt</span>
 </div>
 
@@ -1361,8 +1361,8 @@ body::before{
           </button>
 
           <h1>
-            MLGBTI<br/>性格压力测试
-            <em>Multidimensional Linguistic &amp; Generative Behavior Type Indicator</em>
+            ECHO<br/>性格压力测试
+            <em>Emotional Character Heuristic Oracle</em>
           </h1>
 
           <div class="cover-actions pre-result-actions">
@@ -1397,13 +1397,11 @@ body::before{
           </div>
 
           <div class="cover-bottom">
-            <div class="lettermark" aria-hidden="true">
-              <span data-label="Mindset">M</span>
-              <span data-label="Linguistic">L</span>
-              <span data-label="Groove">G</span>
-              <span data-label="Boundary">B</span>
-              <span data-label="Type">T</span>
-              <span data-label="Indicator">I</span>
+            <div class="lettermark lettermark-4" aria-hidden="true">
+              <span data-label="Emotion">E</span>
+              <span data-label="Character">C</span>
+              <span data-label="Heuristic">H</span>
+              <span data-label="Oracle">O</span>
             </div>
 
             <p class="cover-note">考官较为严厉，这是一场真正的性格压力测试。</p>
@@ -1466,7 +1464,7 @@ body::before{
         <section class="page result" data-page="result" id="resultPage">
           <div class="result-top">
             <span class="camp" id="resCamp">CAMP · 老油条</span>
-            <span>MLGBTI</span>
+            <span>ECHO</span>
           </div>
 
           <div class="result-code" id="resCode">M1-L1-G2-B2</div>
@@ -2012,7 +2010,7 @@ const PORTRAITS = {
       <!-- background screen -->
       <rect x="22" y="36" width="156" height="128" rx="2" fill="#1f3aaa" stroke="#5a7df0"/>
       <text x="32" y="58" font-family="JetBrains Mono, monospace" font-size="9" fill="#cfd9ff">SYSTEM_FATAL</text>
-      <text x="32" y="70" font-family="JetBrains Mono, monospace" font-size="8" fill="#cfd9ff" opacity=".75">0xC000021A · MLGBTI</text>
+      <text x="32" y="70" font-family="JetBrains Mono, monospace" font-size="8" fill="#cfd9ff" opacity=".75">0xC000021A · ECHO</text>
       <text x="32" y="82" font-family="JetBrains Mono, monospace" font-size="8" fill="#cfd9ff" opacity=".55">stack overflow at sanity</text>
       <!-- shattered head -->
       <g stroke="currentColor" fill="none">
@@ -2043,15 +2041,15 @@ const escapeHTML = str => String(str)
   .replace(/'/g, '&#39;');
 
 const DEFAULT_RESULT_CODE = 'M2-L2-G2-B1';
-let hasResult = sessionStorage.getItem('mlgbti.hasResult') === '1';
-let currentResultCode = sessionStorage.getItem('mlgbti.resultCode') || DEFAULT_RESULT_CODE;
+let hasResult = sessionStorage.getItem('echo.hasResult') === '1';
+let currentResultCode = sessionStorage.getItem('echo.resultCode') || DEFAULT_RESULT_CODE;
 let currentCallMode = 'test';      // test | praise | roast
 
 function markResultReady(code=DEFAULT_RESULT_CODE){
   hasResult = true;
   currentResultCode = code;
-  sessionStorage.setItem('mlgbti.hasResult', '1');
-  sessionStorage.setItem('mlgbti.resultCode', code);
+  sessionStorage.setItem('echo.hasResult', '1');
+  sessionStorage.setItem('echo.resultCode', code);
   updateCoverState();
 }
 
