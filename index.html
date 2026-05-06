@@ -2483,18 +2483,11 @@ function shouldUseLiveVoice(){
 }
 
 function testQuestion(scriptItem, index){
-  if (currentCallMode !== 'test') return scriptItem.ask;
-  const occ = userProfile.occupation || '你这个岗位';
-  const work = userProfile.work || '你现在这摊工作';
-  if (index === 0) return `你是做${occ}的。说说${work}里最近一次让你破防的瞬间。`;
-  if (index === 1) return `如果${work}里突然被老板加需求，你怎么回？三秒。`;
-  return `最后一题。作为${occ}，一句话告诉我你到底是哪种职场物种。`;
+  return scriptItem.ask;
 }
 
 function promptWithProfile(basePrompt){
-  const ctx = profileContext();
-  if (!ctx || currentCallMode !== 'test') return basePrompt;
-  return `${basePrompt} 已知${ctx}。追问和评价必须贴合用户的职业和工作内容。`;
+  return basePrompt;
 }
 
 const SCRIPT_LIBRARY = {
@@ -2877,12 +2870,12 @@ function startCall(mode='test'){
 /* ============================================================
    按钮事件
    ============================================================ */
-$('#goBrief').addEventListener('click', startProfileFlow);
+$('#goBrief').addEventListener('click', () => startCall('test'));
 $('#profileStartBtn').addEventListener('click', submitProfileAndStart);
 $('#occupationInput').addEventListener('input', () => { $('#profileError').textContent = ''; });
 $('#workInput').addEventListener('input', () => { $('#profileError').textContent = ''; });
 $('#resultHomeBtn').addEventListener('click', () => { location.hash = 'cover'; });
-$('#homeRetestBtn').addEventListener('click', startProfileFlow);
+$('#homeRetestBtn').addEventListener('click', () => startCall('test'));
 $('#homeContinueBtn').addEventListener('click', () => { location.hash = 'followup'; });
 $('#homeShareBtn').addEventListener('click', () => $('#shareSheet').classList.add('on'));
 $('#shareBtn').addEventListener('click', () => $('#shareSheet').classList.add('on'));
@@ -2944,23 +2937,19 @@ $$('.share-item').forEach(el => el.addEventListener('click', () => {
 }));
 
 /* ============================================================
-   #hash 路由（便于演示/截图）：#cover #profile #battle #analyze #result #followup
+   #hash 路由（便于演示/截图）：#cover #battle #analyze #result #followup
    #result?code=M2-L1-G2-B2 强制指定结果
    ============================================================ */
 function applyHash(){
   const raw = location.hash.replace('#','') || 'cover';
   const [name, qs] = raw.split('?');
-  if (!['cover','profile','battle','analyze','result','followup'].includes(name)) {
+  if (!['cover','battle','analyze','result','followup'].includes(name)) {
     show('cover'); return;
   }
   // 中止任何进行中的对线
   abortBattle();
   setTimeout(() => {
     if (name === 'battle'){
-      if (currentCallMode === 'test' && !profileComplete()){
-        show('profile');
-        return;
-      }
       show('battle'); setTimeout(()=>{ abortRequested=false; runBattle(); }, 360);
     } else if (name === 'analyze'){
       show('analyze'); setTimeout(runAnalyze, 280);
