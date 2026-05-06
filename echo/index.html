@@ -412,6 +412,9 @@ body::before{
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
+.lettermark.lettermark-4{
+  grid-template-columns: repeat(4, 1fr);
+}
 .lettermark span{
   padding: 12px 0; text-align:center;
   font-family: var(--serif-en); font-style: italic;
@@ -476,33 +479,82 @@ body::before{
 @keyframes marquee{ from{ transform: translateX(0);} to{ transform: translateX(-50%);}}
 
 /* ===========================================================
-   02 · 简介过渡 / 规则
+   02 · 测试前资料
    =========================================================== */
-.brief{ justify-content:flex-start;}
-.brief .num{
-  font-family: var(--serif-en); font-style:italic; font-size: 130px; line-height:.8;
-  color: var(--ink); opacity:.18; letter-spacing:-0.04em;
+.profile{
+  justify-content:flex-start;
+  background:
+    radial-gradient(100% 62% at 50% 12%, rgba(230,57,70,.10), transparent 64%),
+    var(--bg);
 }
-.brief h2{
-  margin: 18px 0 6px; font-family: var(--serif-cn); font-weight: 500;
-  font-size: 36px; line-height:1.2; letter-spacing:-.005em;
+.profile h2{
+  margin: 56px 0 8px;
+  font-family: var(--serif-cn);
+  font-weight: 500;
+  font-size: 38px;
+  line-height:1.12;
+  letter-spacing:-.02em;
 }
-.brief p{
-  font-size: 14px; line-height:1.8; color: var(--ink-2); max-width: 360px;
+.profile p{
+  margin: 0;
+  font-size: 13px;
+  line-height:1.8;
+  color: var(--ink-3);
+  max-width: 350px;
 }
-.brief .rules{
-  margin-top: 32px; display:grid; gap:14px;
+.profile-form{
+  margin-top: 42px;
+  display:grid;
+  gap: 18px;
 }
-.brief .rule{
-  display:grid; grid-template-columns: 28px 1fr; gap:14px; align-items:flex-start;
+.field label{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom: 9px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing:.22em;
+  color: var(--ink-3);
+  text-transform: uppercase;
 }
-.brief .rule .k{
-  font-family: var(--mono); color: var(--warn); font-size: 11px; padding-top:3px; letter-spacing:.18em;
+.field label b{
+  color: var(--warn);
+  font-weight: 400;
 }
-.brief .rule .v b{ display:block; font-weight:500; color: var(--ink); margin-bottom: 3px; font-size:14px;}
-.brief .rule .v span{ font-size: 12.5px; color: var(--ink-2); line-height:1.65;}
-.brief .ok{
-  margin-top: 90px;
+.field input,
+.field textarea{
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(244,240,232,.045);
+  color: var(--ink);
+  border-radius: 18px;
+  padding: 15px 16px;
+  font-family: var(--sans-cn);
+  font-size: 15px;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color .2s ease, background .2s ease;
+}
+.field textarea{
+  min-height: 132px;
+  resize: none;
+}
+.field input:focus,
+.field textarea:focus{
+  border-color: rgba(230,57,70,.7);
+  background: rgba(244,240,232,.07);
+}
+.field input::placeholder,
+.field textarea::placeholder{ color: var(--ink-4); }
+.profile-error{
+  min-height: 18px;
+  font-size: 12px;
+  line-height:1.5;
+  color: var(--warn);
+}
+.profile .cta{
+  margin-top: auto;
 }
 
 /* ===========================================================
@@ -1408,6 +1460,30 @@ body::before{
           </div>
         </section>
 
+        <!-- ============== 02 测试前资料 ============== -->
+        <section class="page profile" data-page="profile" id="profilePage">
+          <div class="eyebrow">// BEFORE TEST</div>
+          <h2>先交代一下<br/>你的职场案底</h2>
+          <p>职业和工作内容会被 AI 考官带入提问。重新测试时可以修改。</p>
+
+          <div class="profile-form">
+            <div class="field">
+              <label for="occupationInput">职业 <b>必填</b></label>
+              <input id="occupationInput" type="text" autocomplete="organization-title" maxlength="28" placeholder="例如：产品经理 / 设计师 / 销售 / 程序员" />
+            </div>
+            <div class="field">
+              <label for="workInput">工作内容 <b>必填</b></label>
+              <textarea id="workInput" maxlength="160" placeholder="例如：每天对齐需求、写方案、催研发、给老板解释为什么今天又上线不了"></textarea>
+            </div>
+            <div class="profile-error" id="profileError"></div>
+          </div>
+
+          <button class="cta" id="profileStartBtn" type="button">
+            开始测试
+            <span class="arr">→</span>
+          </button>
+        </section>
+
         <!-- ============== 03 对线 / 沉浸全双工 ============== -->
         <section class="page battle idle" data-page="battle" id="battlePage">
           <div class="battle-top">
@@ -2044,6 +2120,68 @@ const DEFAULT_RESULT_CODE = 'M2-L2-G2-B1';
 let hasResult = sessionStorage.getItem('echo.hasResult') === '1';
 let currentResultCode = sessionStorage.getItem('echo.resultCode') || DEFAULT_RESULT_CODE;
 let currentCallMode = 'test';      // test | praise | roast
+const PROFILE_KEY = 'echo.profile';
+let userProfile = loadUserProfile();
+
+function loadUserProfile(){
+  try {
+    const raw = sessionStorage.getItem(PROFILE_KEY) || localStorage.getItem(PROFILE_KEY);
+    if (!raw) return { occupation:'', work:'' };
+    const parsed = JSON.parse(raw);
+    return {
+      occupation: String(parsed.occupation || '').trim(),
+      work: String(parsed.work || '').trim(),
+    };
+  } catch(e){
+    return { occupation:'', work:'' };
+  }
+}
+
+function saveUserProfile(profile){
+  userProfile = {
+    occupation: String(profile.occupation || '').trim(),
+    work: String(profile.work || '').trim(),
+  };
+  const data = JSON.stringify(userProfile);
+  sessionStorage.setItem(PROFILE_KEY, data);
+  localStorage.setItem(PROFILE_KEY, data);
+}
+
+function fillProfileForm(){
+  const occ = $('#occupationInput');
+  const work = $('#workInput');
+  if (!occ || !work) return;
+  occ.value = userProfile.occupation || '';
+  work.value = userProfile.work || '';
+  $('#profileError').textContent = '';
+}
+
+function profileContext(){
+  if (!userProfile.occupation && !userProfile.work) return '';
+  return `用户职业：${userProfile.occupation || '未填写'}；工作内容：${userProfile.work || '未填写'}`;
+}
+
+function profileComplete(){
+  return !!(userProfile.occupation && userProfile.work);
+}
+
+function startProfileFlow(){
+  currentCallMode = 'test';
+  fillProfileForm();
+  location.hash = 'profile';
+}
+
+function submitProfileAndStart(){
+  const occupation = $('#occupationInput').value.trim();
+  const work = $('#workInput').value.trim();
+  if (!occupation || !work){
+    $('#profileError').textContent = '职业和工作内容都要填，不然 AI 考官没法精准开刀。';
+    return;
+  }
+  saveUserProfile({ occupation, work });
+  currentCallMode = 'test';
+  location.hash = 'battle';
+}
 
 function markResultReady(code=DEFAULT_RESULT_CODE){
   hasResult = true;
@@ -2070,6 +2208,7 @@ function updateCoverState(){
    ============================================================ */
 function show(name){
   if (name === 'cover') updateCoverState();
+  if (name === 'profile') fillProfileForm();
   $$('.page').forEach(p => p.classList.toggle('active', p.dataset.page === name));
 }
 updateCoverState();
@@ -2344,6 +2483,21 @@ function shouldUseLiveVoice(){
   return true;
 }
 
+function testQuestion(scriptItem, index){
+  if (currentCallMode !== 'test') return scriptItem.ask;
+  const occ = userProfile.occupation || '你这个岗位';
+  const work = userProfile.work || '你现在这摊工作';
+  if (index === 0) return `你是做${occ}的。说说${work}里最近一次让你破防的瞬间。`;
+  if (index === 1) return `如果${work}里突然被老板加需求，你怎么回？三秒。`;
+  return `最后一题。作为${occ}，一句话告诉我你到底是哪种职场物种。`;
+}
+
+function promptWithProfile(basePrompt){
+  const ctx = profileContext();
+  if (!ctx || currentCallMode !== 'test') return basePrompt;
+  return `${basePrompt} 已知${ctx}。追问和评价必须贴合用户的职业和工作内容。`;
+}
+
 const SCRIPT_LIBRARY = {
   test: [
     {
@@ -2603,7 +2757,9 @@ async function runBattle(){
     ? '暖场开始。今天先不审判你。'
     : currentCallMode === 'roast'
       ? '破防模式开启。别急着反驳。'
-      : (liveOk ? '麦克风已就位。AI 会先开口。' : '深呼吸。麦克风一直开着——你随时可以说话。'));
+      : (liveOk
+        ? `已读取：${userProfile.occupation || '未知职业'}。AI 会先开口。`
+        : `已读取：${userProfile.occupation || '未知职业'}。深呼吸，测试开始。`));
   await sleep(1100);
 
   for (let i=0; i<script.length; i++){
@@ -2613,7 +2769,7 @@ async function runBattle(){
     /* —— AI 提问 —— */
     setBattleMode('ai');
     setSubtitle(whoLabel(), false);
-    await aiTurn(script[i].ask);
+    await aiTurn(testQuestion(script[i], i));
     if (abortRequested) break;
     await sleep(220);
 
@@ -2628,7 +2784,7 @@ async function runBattle(){
     setSubtitle(whoLabel(), false);
     let reply = script[i].interrupt;
     if (shouldUseLiveVoice() && geminiKey && userText){
-      const sysPrompt = PROMPT[currentCallMode] || PROMPT.test;
+      const sysPrompt = promptWithProfile(PROMPT[currentCallMode] || PROMPT.test);
       const dynamic = await geminiReply(sysPrompt, `用户刚说："${userText}"。请回应。`);
       if (dynamic) reply = dynamic;
     }
@@ -2722,9 +2878,12 @@ function startCall(mode='test'){
 /* ============================================================
    按钮事件
    ============================================================ */
-$('#goBrief').addEventListener('click', () => startCall('test'));
+$('#goBrief').addEventListener('click', startProfileFlow);
+$('#profileStartBtn').addEventListener('click', submitProfileAndStart);
+$('#occupationInput').addEventListener('input', () => { $('#profileError').textContent = ''; });
+$('#workInput').addEventListener('input', () => { $('#profileError').textContent = ''; });
 $('#resultHomeBtn').addEventListener('click', () => { location.hash = 'cover'; });
-$('#homeRetestBtn').addEventListener('click', () => startCall('test'));
+$('#homeRetestBtn').addEventListener('click', startProfileFlow);
 $('#homeContinueBtn').addEventListener('click', () => { location.hash = 'followup'; });
 $('#homeShareBtn').addEventListener('click', () => $('#shareSheet').classList.add('on'));
 $('#shareBtn').addEventListener('click', () => $('#shareSheet').classList.add('on'));
@@ -2786,19 +2945,23 @@ $$('.share-item').forEach(el => el.addEventListener('click', () => {
 }));
 
 /* ============================================================
-   #hash 路由（便于演示/截图）：#cover #battle #analyze #result #followup
+   #hash 路由（便于演示/截图）：#cover #profile #battle #analyze #result #followup
    #result?code=M2-L1-G2-B2 强制指定结果
    ============================================================ */
 function applyHash(){
   const raw = location.hash.replace('#','') || 'cover';
   const [name, qs] = raw.split('?');
-  if (!['cover','battle','analyze','result','followup'].includes(name)) {
+  if (!['cover','profile','battle','analyze','result','followup'].includes(name)) {
     show('cover'); return;
   }
   // 中止任何进行中的对线
   abortBattle();
   setTimeout(() => {
     if (name === 'battle'){
+      if (currentCallMode === 'test' && !profileComplete()){
+        show('profile');
+        return;
+      }
       show('battle'); setTimeout(()=>{ abortRequested=false; runBattle(); }, 360);
     } else if (name === 'analyze'){
       show('analyze'); setTimeout(runAnalyze, 280);
